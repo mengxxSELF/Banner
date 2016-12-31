@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片渐隐渐现</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            list-style: none;
+            text-decoration: none;
+        }
+        #box{
+            position: relative;
+            width: 1000px;
+            height: 400px;
+            margin: 0 auto;
+        }
+        .boxInner{
+            width: 1000px;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+            background: url("img/default.gif") no-repeat center #e1e1e1;
+        }
+        .boxInner div{
+            position: absolute;
+            left:0;
+            top:0;
+            width:1000px;
+            height:400px;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .box ul{
+            position: absolute;
+            right:30px;
+            bottom:10px;
+            z-index: 99;
+        }
+        .box ul li{
+            width:30px;
+            height:30px;
+            border-radius: 50%;
+            background: #ccc;
+            float: left;
+            margin-left:10px;
+            cursor: pointer;
+        }
+        .box ul li.on{
+            background: lightblue;
+        }
+        .box a{
+            width:30px;
+            height:48px;
+            position: absolute;
+            top:126px;
+            background-image: url("img/pre.png");
+            background-repeat: no-repeat;
+            z-index: 99;
+            opacity: .3;
+            filter:alpha(opacity:30);
+            display: none;
+        }
+        .box a:hover{
+            opacity: 1;
+            filter:alpha(opacity:100);
+        }
+        .box a.left{
+            left:30px;
+            background-position: 0 0;
+        }
+        .box a.right{
+            right:30px;
+            background-position: -50px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="boxInner">
+        <!--<div><img src="img/1.jpg" alt=""></div>
+        <div><img src="img/2.jpg" alt=""></div>
+        <div><img src="img/3.jpg" alt=""></div>
+        <div><img src="img/4.jpg" alt=""></div>
+    --></div>
+    <ul>
+       <!-- <li class="on"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    --></ul>
+    <a href="javascript:;" id="left" class="left"></a>
+    <a href="javascript:;" id="right" class="right"></a>
+</div>
+<script src="js/utils.js"></script>
+<script src="js/move.js"></script>
+<script>
+    /*需求：轮播图 渐隐渐现
+    * 思路：不断改变图片层级关系 要显示的盒子 zIndex 为 1 其余为0  要显示的盒子 opacity 为1 其余为0
+    * 步骤：1 ajax 获取数据并解析
+     *      2 根据数据进行页面渲染 图片延迟加载  渐现第一张图片
+     *      3 开启定时器 切换图片
+     *      4 焦点切换
+     *      5 鼠标悬停
+     *      6 点击焦点 切换图片
+     *      7 点击左右按钮 切换图片*/
+
+    var oBox = document.getElementById('box');
+    var oInnerBox = document.getElementsByClassName('boxInner')[0];
+    var oBtnL = document.getElementsByTagName('a')[0];
+    var oBtnR = document.getElementsByTagName('a')[1];
+    var oUl = document.getElementsByTagName('ul')[0];
+    var ali = document.getElementsByTagName('li');
+    var adiv = oInnerBox.getElementsByTagName('div');
+    var aimg = document.getElementsByTagName('img');
+    var n=0; // 记录需要显示的图片索引
+    var timer; // 定时器
+    var data;
+
+//    1 ajax 获取数据并解析
+    (function () {
+        // 创建 打开地址 监听状态 发送请求
+        var xml = new XMLHttpRequest();
+        xml.open('get','json/data.txt',false);
+        xml.onreadystatechange = function () {
+            if(xml.readyState==4&&(/^2\d{2}$/).test(xml.status)){
+                data = utils.jsonParse(xml.responseText);
+            }
+        }
+        xml.send();
+    })()
+//    2.1 根据数据进行页面渲染 这里使用的是字符串拼接
+    var strDiv='',strLi='';
+    (function () {
+        for(var i=0;i<data.length;i++){
+            strDiv+='<div><img realImg='+data[i].imgSrc+'></div>';
+            strLi+= i==0?'<li class="on"></li>':'<li></li>';
+        };
+        oInnerBox.innerHTML+=strDiv;
+        oUl.innerHTML+=strLi;
+        setTimeout(function () {
+            lazyImg();
+            showFirstImg(); // 显示第一张图片
+        },1000);// 延迟加载
+    })()
+    // 2.2 图片延迟加载
+    function lazyImg(){
+        for(var i=0;i<aimg.length;i++){
+            (function (index) {
+                var cur = aimg[index];
+                // 创建 赋值 校验 赋值 优化
+                var oimg = new Image();
+                oimg.src= cur.getAttribute('realImg');
+                oimg.onload= function () {
+                    cur.src=this.src;
+                    oimg=null;
+                }
+            })(i)
+        }
+    }
+    // 2.3 将第一张图片 渐现  z-index 1 opacity 1
+    function showFirstImg(){
+        utils.css(adiv[0],{zIndex:1})
+        animate({
+            id:adiv[0],
+            target:{opacity:1}
+        })
+    }
+
+//  3 开启定时器 切换图片
+    clearInterval(timer);
+    timer=setInterval(moving,2000)
+    function moving(){
+        //切换图片
+        // 边界判断
+       // if(n==adiv.length-1){n=0}else{n++;};
+        n= n==adiv.length-1?0:n+1;
+        animating(); // 图片渐隐渐现
+        tipMove();// 焦点切换
+    }
+    function animating(){ // 图片渐隐渐现 要显示的图片 层级为1 其余 0  然后要显示的Opacity 1 其余0
+        for(var i=0;i<adiv.length;i++){
+            var cur = adiv[i];
+            if(i==n){
+                utils.css(cur,{zIndex:1});
+                animate({
+                    id:cur,
+                    target:{opacity:1},
+                    cb: function () { // 在回调函数里 将其余 Opacity 置为 0
+                        for(var j=0;j<adiv.length;j++){
+                            if(j!=n){
+                                utils.css(adiv[j],{opacity:0})
+                            }
+                        }
+                    }
+                })
+            }else{
+                utils.css(cur,{zIndex:0})
+            }
+        };
+    }
+//  4 焦点切换
+    function tipMove(){
+        for(var i=0;i<ali.length;i++){
+            ali[i].className= i==n?'on':null;
+        }
+    }
+
+//  5 鼠标悬停
+    mouseMove();
+    function mouseMove(){
+        oBox.onmousemove= function () {
+            clearInterval(timer);
+            oBtnL.style.display = oBtnR.style.display='block';
+        }
+        oBox.onmouseout= function () {
+            timer=setInterval(moving,2000)
+            oBtnL.style.display = oBtnR.style.display='none';
+        }
+    }
+//   6 点击焦点 切换图片
+    tipClick();
+    function tipClick(){
+        for(var i=0;i<ali.length;i++){
+            (function (index) {
+                var cur= ali[index];
+                cur.onclick= function () {
+                    n=index;
+                    animating(); // 图片渐隐渐现
+                    tipMove();// 焦点切换
+                }
+            })(i)
+        }
+    }
+//  7 点击左右按钮 切换图片*/
+    btnClick();
+    function btnClick(){
+        oBtnR.onclick = moving; // 相当于执行一次n+1
+        oBtnL.onclick = function () {
+            // 相当于执行一次n-1
+            //n--;
+            // 边界判断 if(n==-1){n=adiv.length-1}
+            n= n==0?n=adiv.length-1:n-1;
+            animating(); // 图片渐隐渐现
+            tipMove();// 焦点切换
+        }
+    }
+</script>
+</body>
+</html>

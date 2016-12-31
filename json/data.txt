@@ -1,0 +1,8 @@
+[
+    {"imgSrc": "img/1.jpg"},
+    {"imgSrc": "img/2.jpg"},
+    {"imgSrc": "img/5.jpg"},
+    {"imgSrc": "img/6.jpg"},
+    {"imgSrc": "img/3.jpg"},
+    {"imgSrc": "img/4.jpg"}
+]
