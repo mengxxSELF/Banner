@@ -4,6 +4,10 @@
 
 [左右轮播模板演示地址](http://www.webmxx.com/dest/JSTEST/banner/banner.html)
 
+[核心JS函数代码地址](http://www.webmxx.com/dest/JSTEST/banner/js/Banner2.0.js)
+
 ## 渐隐渐现
 
 [渐隐渐现模板演示地址](http://www.webmxx.com/dest/JSTEST/banner/banner_show_hide.html)
+
+[核心JS函数代码地址](http://www.webmxx.com/dest/JSTEST/banner/js/Banner4.0.js)
