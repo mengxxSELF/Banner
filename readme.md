@@ -11,3 +11,7 @@
 [渐隐渐现模板演示地址](http://www.webmxx.com/dest/JSTEST/banner/banner_show_hide.html)
 
 [核心JS函数代码地址](http://www.webmxx.com/dest/JSTEST/banner/js/Banner4.0.js)
+
+
+### 渐隐渐现 配合 jQuery
+[渐隐渐现配合 jQuery 模板演示地址]()
