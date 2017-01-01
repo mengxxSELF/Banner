@@ -14,4 +14,6 @@
 
 
 ### 渐隐渐现 配合 jQuery
-[渐隐渐现配合 jQuery 模板演示地址]()
+[渐隐渐现配合 jQuery 模板演示地址](http://www.webmxx.com/dest/JSTEST/banner/banner_jq.html)
+
+[核心JS函数代码地址](https://github.com/mengxxSELF/Banner/blob/master/js/Banner5.0.js)
