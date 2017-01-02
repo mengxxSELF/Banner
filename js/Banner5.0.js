@@ -129,14 +129,25 @@ Banner.prototype={
     clickBtn: function () {
         // 左右点击按钮
         var _this =this;
-        _this.$aBtnRight.click(function () {
+        /*_this.$aBtnRight.click(function () {
             _this.n = _this.n==_this.$aDiv.length-1?0:_this.n+1
             _this.showImg();
         });
         _this.$aBtnLeft.click(function () {
             _this.n = _this.n==0?_this.$aDiv.length-1:_this.n-1
             _this.showImg();
-        });
+        });*/
+        this.$aBtn.click(function () {
+            // 根据按钮的class判断是左边还是右边  左边-》 n-1  右边 -》 n+1
+            if($(this).hasClass('left'))  {
+                // 点击左侧按钮 进行边界判断
+                _this.n= _this.n==0?_this.$aDiv.length-1:_this.n-1;
+            }else{
+                // 点击右侧按钮  进行边界判断
+                _this.n= _this.n==_this.$aDiv.length-1?0:_this.n+1;
+            }
+            _this.showImg();
+        })
     }
 
 }
