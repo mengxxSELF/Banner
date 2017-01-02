@@ -10,7 +10,7 @@
 
 [左右轮播模板演示地址](http://www.webmxx.com/dest/JSTEST/banner/banner2_jq.html)
 
-[核心JS函数代码地址]()
+[核心JS函数代码地址](https://github.com/mengxxSELF/Banner/blob/master/js/Banner7.0.js)
 
 
 
