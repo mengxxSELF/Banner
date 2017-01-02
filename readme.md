@@ -6,6 +6,12 @@
 
 [核心JS函数代码地址](http://www.webmxx.com/dest/JSTEST/banner/js/Banner2.0.js)
 
+## 左右轮播 构造函数版
+
+[左右轮播模板演示地址]()
+
+[核心JS函数代码地址]()
+
 ## 左右轮播配合jq
 
 [左右轮播模板演示地址](http://www.webmxx.com/dest/JSTEST/banner/banner2_jq.html)

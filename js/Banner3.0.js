@@ -32,7 +32,7 @@ Banner.prototype={
         clearInterval(this.timer);
         this.timer = setInterval(function () {
             _this.moving();
-        },this.duration)
+        },_this.duration)
 
     //    3 焦点轮播 bannerTip
     //    4 鼠标悬停
@@ -97,7 +97,7 @@ Banner.prototype={
     },
     bannerTip: function () {
         for(var i=0;i<this.aLi.length;i++){
-            this.aLi[i].className= this.n%4==i?'on':''
+            this.aLi[i].className= this.n%(this.aDiv.length-1) ==i?'on':''
         }
     },
     mouseChange: function () {
@@ -119,18 +119,19 @@ Banner.prototype={
         // 焦点点击 i  n
         var _this =this;
         for(var i=0;i<this.aLi.length;i++){
-            var cur = this.aLi[i]
-            cur.index = i;
-            cur.onclick = function () {
-                _this.n=this.index;
-                animate({
-                    id:_this.oBoxInner,
-                    target:{
-                        left:-_this.n*1000
-                    }
-                });
-                _this.bannerTip(); // 焦点
-            }
+            (function (index) {
+                var cur = _this.aLi[index]
+                cur.onclick = function () {
+                    _this.n=index;
+                    animate({
+                        id:_this.oBoxInner,
+                        target:{
+                            left:-_this.n*1000
+                        }
+                    });
+                    _this.bannerTip(); // 焦点
+                }
+            })(i)
         }
     },
     clickBtn: function () {
