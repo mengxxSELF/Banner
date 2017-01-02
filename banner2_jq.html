@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> 获取图片数据 左右切换banner</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            list-style: none;
+            text-decoration: none;
+        }
+        .box{
+            width:1000px;
+            height:300px;
+            margin:30px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .boxInner{
+            width: 4000px;
+            position: absolute;
+            left:0;
+            top:0;
+        }
+        .boxInner div{
+            width:1000px;
+            float: left;
+        }
+        .box ul{
+            position: absolute;
+            right:30px;
+            bottom:10px;
+        }
+        .box ul li{
+            width:30px;
+            height:30px;
+            border-radius: 50%;
+            background: #ccc;
+            float: left;
+            margin-left:10px;
+            cursor: pointer;
+        }
+        .box ul li.on{
+            background: lightblue;
+        }
+        .box a{
+            width:30px;
+            height:48px;
+            position: absolute;
+            top:126px;
+            background-image: url("img/pre.png");
+            background-repeat: no-repeat;
+            opacity: .3;
+            filter:alpha(opacity:30);
+            display: none;
+        }
+        .box a:hover{
+            opacity: 1;
+            filter:alpha(opacity:100);
+        }
+        .box a.left{
+            left:30px;
+            background-position: 0 0;
+        }
+        .box a.right{
+            right:30px;
+            background-position: -50px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="box" id="box">
+    <div class="boxInner"></div>
+    <ul></ul>
+    <a href="javascript:;" id="left" class="left"></a>
+    <a href="javascript:;" id="right" class="right"></a>
+</div>
+<script src="js/jquery.3.0.0.min.js"></script>
+<script src="js/Banner7.0.js"></script>
+
+<script>
+    /* 图片切换 配合jq 构造函数版本 */
+    var ban = new Banner({
+        el:$('#box'),
+        duration:2000,
+        effect:2,
+        url:'json/data.txt'
+    });
+</script>
+</body>
+</html>
